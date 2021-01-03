@@ -1,0 +1,37 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.addScreen{
+    text-align: center;
+}
+.addScreen > h2{
+    padding: 5px;
+}
+form{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+.input,.submitButton{
+    font-size: 25px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+    outline-color: cyan;
+}
+
+.input{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 99%;
+}
+.submitButton{
+    background-color: bisque;
+    border: none;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    width: 100%;
+    border-radius: 5px;
+}

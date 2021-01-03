@@ -55,8 +55,8 @@ app.on('ready', () => {
 function createAddWindow() {
     // create new window
     addWindow = new BrowserWindow({
-        width: 300,
-        height: 200,
+        width: 500,
+        height: 500,
         title: 'Add Shopping List Item',
         webPreferences: {
             nodeIntegration: true,
@@ -75,12 +75,17 @@ function createAddWindow() {
     });
 }
 
-// catch item add
+/*
+ * catching calls from the react UI
+ */
 ipcMain.on('item:add', (e, item) => {
-    console.log(item);
-    // mainWindow.webContents.send('item:add', item);
-    //addWindow.close();
+    // sending values to Home
+    mainWindow.webContents.send('item:add', item);
+    addWindow.close();
 });
+ipcMain.on('item:openAddWindow', ()=>{
+    createAddWindow();
+})
 
 // create a menu template
 const mainMenuTemplate = [
@@ -89,12 +94,16 @@ const mainMenuTemplate = [
         submenu: [
             {
                 label: 'Add Item',
+                accelerator:
+                    process.platform === 'darwin' ? 'Command+L' : 'Ctrl+L',
                 click() {
                     createAddWindow();
                 },
             },
             {
                 label: 'Clear Items',
+                accelerator:
+                    process.platform === 'darwin' ? 'Command+D' : 'Ctrl+D',
                 click() {
                     mainWindow.webContents.send('item:clear');
                 },

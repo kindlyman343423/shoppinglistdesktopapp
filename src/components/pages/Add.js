@@ -1,11 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react';
+import '../styles/Add.css';
+const {ipcRenderer} = window.require('electron');
 
 const Add = () => {
-    return (
-        <div>
-            this is add the page
-        </div>
-    )
-}
+    const [itemName, setItemName] = useState('');
 
-export default Add
+    const inputHandler = (e) => {
+        setItemName(e.target.value);
+    }
+
+    // sending values to main.js
+    const submitHandler = (e) => {
+        e.preventDefault();
+        ipcRenderer.send('item:add', itemName);
+        setItemName("");
+    };
+
+    return (
+        <div className="addScreen">
+            <h2>Add Item</h2>
+            <form onSubmit={submitHandler}>
+                <input 
+                    type="text" 
+                    value={itemName}
+                    onChange={inputHandler}
+                    className="input" 
+                    autoFocus/>
+                <br/>
+                <button type="submit" className="submitButton">
+                    Add
+                </button>
+            </form>
+        </div>
+    );
+};
+
+export default Add;

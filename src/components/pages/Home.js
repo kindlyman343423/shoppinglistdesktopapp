@@ -1,32 +1,34 @@
-import React from 'react';
-import logo from '../../logo.svg';
+import React,{useEffect,useState} from 'react';
 import '../styles/Home.css';
+import ShoppingList from '../common/ShoppingList';
 const {ipcRenderer} = window.require('electron');
-//const {ipcRenderer} = electron;
 
 const Home = () => {
+    const [list, setList] = useState([]);
 
-    const click = ()=>{
-        ipcRenderer.send('item:add', 'addValue');
+    useEffect(() => {
+        ipcRenderer.on('item:add', (e, item)=>{
+            setList(() =>([...list,item]));
+        })
+
+        ipcRenderer.on('item:clear', ()=>{
+            setList([]);
+        })
+    }, [list])
+
+    // function to delete the selected item
+    const deleteSelected = (item) => {
+        setList(list.filter((val)=>{
+            return val!==item;
+        }))
     }
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-                <button onClick={click}>click me</button>
-            </header>
+        <div className="Home">
+            <h1>Shopping List</h1>
+            <ol className="shoppingList">
+                <ShoppingList list={list} deleteSelected={deleteSelected}/>
+            </ol>
         </div>
     );
 };
