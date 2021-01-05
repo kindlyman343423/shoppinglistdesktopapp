@@ -4,14 +4,8 @@ const path = require('path');
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
 const DEV_SERVER_URL = 'http://localhost:3000';
-
-/**
- * set the NODE ENV value according to the mode
- * AVAILABLE VALUES
- * - production
- * - development
- **/
-process.env.NODE_ENV = 'development';
+const dirname = __dirname.split('/');
+dirname.pop();
 
 let mainWindow;
 let addWindow;
@@ -32,7 +26,7 @@ app.on('ready', () => {
         process.env.NODE_ENV !== 'production'
             ? DEV_SERVER_URL
             : url.format({
-                pathname: path.join(__dirname, '../build/index.html'),
+                pathname: dirname.join('/') + '/build/index.html',
                 protocol: 'file:',
                 slashes: true
             })
@@ -67,7 +61,11 @@ function createAddWindow() {
     addWindow.loadURL(
         process.env.NODE_ENV !== 'production'
             ? path.join(DEV_SERVER_URL,'add')
-            : '/add'
+            : url.format({
+                pathname: './add',
+                protocol: 'file:',
+                slashes: true
+            })
     );
 
     addWindow.on('close', () => {
@@ -126,7 +124,7 @@ if (process.platform === 'darwin') {
 }
 
 // use dev tools only for dev env
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'production') {
     mainMenuTemplate.push({
         label: 'Developer Tools',
         submenu: [
