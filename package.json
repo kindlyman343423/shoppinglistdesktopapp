@@ -6,6 +6,7 @@
   "homepage": "./",
   "dependencies": {
     "@testing-library/react": "^11.1.0",
+    "mongoose": "^5.11.10",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
