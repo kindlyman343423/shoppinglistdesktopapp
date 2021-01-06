@@ -3,6 +3,7 @@ const url = require('url');
 const path = require('path');
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 const db = require('../mongoose/db');
+const killport = require('../.erboilerplate/kill').killProcessAtPort;
 
 const DEV_SERVER_URL = 'http://localhost:3000';
 const dirname = __dirname.split('/');
@@ -47,6 +48,7 @@ app.on('ready', () => {
     // quit app when closed
     mainWindow.on('close', () => {
         app.quit();
+        killport(3000);
     });
 
     // build menu from template
