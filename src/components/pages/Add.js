@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/Add.css';
+import Alert from '../common/Alert';
 const {ipcRenderer} = window.require('electron');
 
 const Add = () => {
@@ -17,21 +18,24 @@ const Add = () => {
     };
 
     return (
-        <div className="addScreen">
-            <h2>Add Item</h2>
-            <form onSubmit={submitHandler}>
-                <input 
-                    type="text" 
-                    value={itemName}
-                    onChange={inputHandler}
-                    className="input" 
-                    autoFocus/>
-                <br/>
-                <button type="submit" className="submitButton">
-                    Add
-                </button>
-            </form>
-        </div>
+        <>
+            <Alert />
+            <div className="addScreen">
+                <h2>Add Item</h2>
+                <form onSubmit={submitHandler}>
+                    <input 
+                        type="text" 
+                        value={itemName}
+                        onChange={inputHandler}
+                        className="input" 
+                        autoFocus/>
+                    <br/>
+                    <button type="submit" className="submitButton">
+                        Add
+                    </button>
+                </form>
+            </div>
+        </>
     );
 };
 

@@ -1,6 +1,7 @@
 import React,{useEffect,useState} from 'react';
 import '../styles/Home.css';
 import ShoppingList from '../common/ShoppingList';
+import Alert from '../common/Alert';
 const {ipcRenderer} = window.require('electron');
 
 const Home = () => {
@@ -32,12 +33,15 @@ const Home = () => {
     }
 
     return (
-        <div className="Home">
-            <h1>Shopping List</h1>
-            <ol className="shoppingList">
-                <ShoppingList list={list} deleteSelected={deleteSelected}/>
-            </ol>
-        </div>
+        <>
+            <Alert />
+            <div className="Home">
+                <h1>Shopping List</h1>
+                <ol className="shoppingList">
+                    <ShoppingList list={list} deleteSelected={deleteSelected}/>
+                </ol>
+            </div>
+        </>
     );
 };
 

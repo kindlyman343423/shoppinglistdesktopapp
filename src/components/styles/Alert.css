@@ -1,0 +1,20 @@
+.alert-cross{
+    float: right;
+    cursor: pointer;
+    font-size: 18px;
+}
+.alert{
+    text-align: center;
+    position: absolute;
+    background-color: #e96840;
+    width: 50%;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    color: white;
+    overflow-wrap: break-word;
+    border-radius: 5px;
+    cursor: pointer;
+}
