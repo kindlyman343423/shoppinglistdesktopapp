@@ -38,6 +38,7 @@ app.on('ready', () => {
                 mainWindow.webContents.send('item:add', res);
             }
         })
+        .catch(err => console.log("Mongodb connection error"));
     })
 
     // quit app when closed
@@ -86,11 +87,14 @@ function createAddWindow() {
  */
 ipcMain.on('item:add', (e, item) => {
     // add the list item to mongo
-    const res = db.addNewShoppingListItem(item);
-    if(res.status!==null && res.status!==405){
-        // sending values to Home
-        mainWindow.webContents.send('item:add', item);
-    }
+    db.addNewShoppingListItem(item)
+    .then(res => {
+        if(res.status!==null && res.status!==405){
+            // sending values to Home
+            mainWindow.webContents.send('item:add', item);
+        }
+    })
+    .catch(err => console.log("Mongodb connection error"));
     addWindow.close();
 });
 ipcMain.on('item:openAddWindow', ()=>{
@@ -123,6 +127,7 @@ const mainMenuTemplate = [
                     .then(()=>{
                         mainWindow.webContents.send('item:clear');
                     })
+                    .catch(err => console.log("Error while clearing items"))
                 },
             },
             {

@@ -6,9 +6,11 @@ mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-});
+})
+.catch(err => console.log("!!! Error while connecting please check your mongodb service"));
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'Connection error:'));
+db.on('error', console.error.bind('Connection error:'))
+
 
 // function to add the values in the backend
 function addNewShoppingListItem(item){
