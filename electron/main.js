@@ -1,5 +1,4 @@
 const electron = require('electron');
-const url = require('url');
 const path = require('path');
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 const db = require('../mongoose/db');
@@ -8,6 +7,10 @@ const killport = require('../.erboilerplate/kill').killProcessAtPort;
 const DEV_SERVER_URL = 'http://localhost:3000';
 const dirname = __dirname.split('/');
 dirname.pop();
+dirname.push('build');
+dirname.push('index.html');
+
+console.log('\x1b[34m',`Application Running in ${process.env.NODE_ENV}`,'\x1b[0m');
 
 let mainWindow;
 let addWindow;
@@ -19,7 +22,7 @@ app.on('ready', () => {
     // create new window
     mainWindow = new BrowserWindow({
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: true
         },
     });
 
@@ -27,11 +30,7 @@ app.on('ready', () => {
     mainWindow.loadURL(
         process.env.NODE_ENV !== 'production'
             ? DEV_SERVER_URL
-            : url.format({
-                pathname: dirname.join('/') + '/build/index.html',
-                protocol: 'file:',
-                slashes: true
-            })
+            : 'file://'+dirname.join('/')+'#/'
     ).then(() => {
         db.getAllTheShoppingListItems()
         .then(res => {
@@ -70,16 +69,11 @@ function createAddWindow() {
             nodeIntegration: true,
         },
     });
-
     // load the add the component file
     addWindow.loadURL(
         process.env.NODE_ENV !== 'production'
             ? path.join(DEV_SERVER_URL,'add')
-            : url.format({
-                pathname: './add',
-                protocol: 'file:',
-                slashes: true
-            })
+            : 'file://'+dirname.join('/')+'#/add'
     );
 
     addWindow.on('close', () => {
