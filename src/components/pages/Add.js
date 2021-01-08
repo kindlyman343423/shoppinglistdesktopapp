@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/Add.css';
 import Alert from '../common/Alert';
-const {ipcRenderer} = window.require('electron');
 
 const Add = () => {
     const [itemName, setItemName] = useState('');
@@ -13,7 +12,7 @@ const Add = () => {
     // sending values to main.js
     const submitHandler = (e) => {
         e.preventDefault();
-        ipcRenderer.send('item:add', itemName);
+        window.api.send('item:add', itemName);
         setItemName("");
     };
 

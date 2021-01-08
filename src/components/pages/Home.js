@@ -2,13 +2,12 @@ import React,{useEffect,useState} from 'react';
 import '../styles/Home.css';
 import ShoppingList from '../common/ShoppingList';
 import Alert from '../common/Alert';
-const {ipcRenderer} = window.require('electron');
 
 const Home = () => {
     const [list, setList] = useState([]);
 
     useEffect(() => {
-        ipcRenderer.on('item:add', (e, item)=>{
+        window.api.receive('item:add', (item)=>{
             if(Array.isArray(item) && item.length>0){
                 const arr = item.map(val => {
                     return val._doc.name;
@@ -18,15 +17,15 @@ const Home = () => {
                 setList(() =>([...list,item]));
             }
         })
-
-        ipcRenderer.on('item:clear', ()=>{
+        window.api.receive('item:clear',()=>{
             setList([]);
         })
+
     }, [list])
 
     // function to delete the selected item
     const deleteSelected = (item) => {
-        ipcRenderer.send('item:clearSelected', item);
+        window.api.send('item:clearSelected', item);
         setList(list.filter((val)=>{
             return val!==item;
         }))

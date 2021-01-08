@@ -1,11 +1,10 @@
 import React,{useState,useEffect} from 'react';
 import '../styles/Alert.css';
-const {ipcRenderer} = window.require('electron');
 
 const Alert = () => {
     const [alertValue, setAlertValue] = useState("");
     useEffect(() => {
-        ipcRenderer.on('item:error' , (e, err)=>{
+        window.api.receive('item:error', (err)=>{
             setAlertValue(err);
         })
 

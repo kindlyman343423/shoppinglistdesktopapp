@@ -12,6 +12,8 @@ dirname.push('index.html');
 
 console.log('\x1b[34m',`Application Running in ${process.env.NODE_ENV}`,'\x1b[0m');
 
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 let addWindow;
 
@@ -22,11 +24,14 @@ app.on('ready', () => {
     // create new window
     mainWindow = new BrowserWindow({
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: false,     // is default value after Electron v5
+            contextIsolation: true,     // protect against prototype pollution
+            enableRemoteModule: false,  // turn off remote
+            preload: path.join(__dirname, "preload.js") // use a preload script
         },
     });
 
-    // load the html file
+    // load the app mainWindow
     mainWindow.loadURL(
         process.env.NODE_ENV !== 'production'
             ? DEV_SERVER_URL
@@ -66,7 +71,10 @@ function createAddWindow() {
         height: 500,
         title: 'Add Shopping List Item',
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: false,     // is default value after Electron v5
+            contextIsolation: true,     // protect against prototype pollution
+            enableRemoteModule: false,  // turn off remote
+            preload: path.join(__dirname, "preload.js") // use a preload script
         },
     });
     // load the add the component file

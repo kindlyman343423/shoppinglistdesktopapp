@@ -1,9 +1,8 @@
 import React from 'react';
-const { ipcRenderer } = window.require('electron');
 
 const ShoppingList = ({ list, deleteSelected }) => {
     const addToList = () => {
-        ipcRenderer.send('item:openAddWindow');
+        window.api.send('item:openAddWindow');
     };
 
     if (Array.isArray(list) && list.length > 0) {
