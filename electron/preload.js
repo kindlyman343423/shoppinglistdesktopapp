@@ -3,7 +3,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 // Expose protected methods that allow the renderer process to use
 // the ipcRenderer without exposing the entire object
 contextBridge.exposeInMainWorld('api', {
-    send: (channel, data) => {
+    send: async (channel, data) => {
         // whitelist channels
         let validChannels = [
             'item:add',
@@ -13,7 +13,7 @@ contextBridge.exposeInMainWorld('api', {
             'item:openAddWindow',
         ];
         if (validChannels.includes(channel)) {
-            ipcRenderer.send(channel, data);
+            await ipcRenderer.invoke(channel, data);
         }
     },
     receive: (channel, func) => {

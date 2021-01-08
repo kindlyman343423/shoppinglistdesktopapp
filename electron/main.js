@@ -24,9 +24,9 @@ app.on('ready', () => {
     // create new window
     mainWindow = new BrowserWindow({
         webPreferences: {
-            nodeIntegration: false,     // is default value after Electron v5
-            contextIsolation: true,     // protect against prototype pollution
-            enableRemoteModule: false,  // turn off remote
+            nodeIntegration: false,                     // is default value after Electron v5
+            contextIsolation: true,                     // protect against prototype pollution
+            enableRemoteModule: false,                  // turn off remote
             preload: path.join(__dirname, "preload.js") // use a preload script
         },
     });
@@ -44,8 +44,12 @@ app.on('ready', () => {
             }
         })
         .catch(err => {
-            console.log("Mongodb connection error")
-            mainWindow.webContents.send('item:error', 'We are unable to get the shopping list Items. Please check your mongodb connection');
+            mainWindow.webContents.send(
+                'item:error', 
+                err===502 
+                ? 'We are unable to get the shopping list Items. Please check your mongodb connection'
+                : 'Unable to get shopping list Items'
+            );
         });
     })
 
@@ -92,26 +96,38 @@ function createAddWindow() {
 /*
  * catching calls from the react UI
  */
-ipcMain.on('item:add', (e, item) => {
+ipcMain.handle('item:add', async (e, item)=>{
     // add the list item to mongo
     db.addNewShoppingListItem(item)
     .then(res => {
-        if(res.status!==null && res.status!==405){
-            // sending values to Home
-            mainWindow.webContents.send('item:add', item);
-            addWindow.close();
-        }
+        // sending values to Home
+        mainWindow.webContents.send('item:add', item);
+        addWindow.close();
     })
     .catch(err => {
-        addWindow.webContents.send('item:error','Unable to add the Item. Please check your mongodb connection.');
+        addWindow.webContents.send(
+            'item:error',
+            err===502 ? 
+            'Unable to add the Item. Please check your mongo connection' :
+            err===405 ? 
+            'Adding Null or Empty item is not allowed' : 
+            'Unable to add the Item to the list'
+        );
     });
-});
-ipcMain.on('item:openAddWindow', ()=>{
+})
+ipcMain.handle('item:openAddWindow', async()=>{
     createAddWindow();
 })
-ipcMain.on('item:clearSelected',(e, name)=>{
+ipcMain.handle('item:clearSelected', async (e,name)=>{
     db.deleteSelectedItem(name)
-    .catch(err => console.log(err))
+    .catch(err => {
+        mainWindow.webContents.send(
+            'item:error',
+            err===502 ? 
+            'Unable to delete the Selected Item. Please check your mongodb connection.' :
+            'Unable to delete the Selected Item'
+        );
+    })
 })
 
 // create a menu template
@@ -137,7 +153,12 @@ const mainMenuTemplate = [
                         mainWindow.webContents.send('item:clear');
                     })
                     .catch(err => {
-                        mainWindow.webContents.send('item:error','Unable to clear the Items. Please check your mongodb connection.');
+                        mainWindow.webContents.send(
+                            'item:error',
+                            err===502 ? 
+                            'Unable to clear the Items. Please check your mongodb connection.' :
+                            'Unable to clear the Items'
+                        );
                     })
                 },
             },
