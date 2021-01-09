@@ -1,22 +1,30 @@
 const mongoose = require('mongoose');
 const MONGODB_URI = "mongodb://localhost:27017/test";
 const shoppingList = require('../models/shoppingList');
-let CONNECTION = false;
-
-mongoose.connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-})
-.then(()=>{
-    CONNECTION=true;
-})
-.catch(err => 
-    console.log("!!! Error while connecting please check your mongodb service")
-);
-
+process.env.CONNECTION = false;
 const db = mongoose.connection;
-db.on('error', console.error.bind('Connection error:'))
+
+function connectToDB(){
+    console.log('checking connection');
+    if(process.env.CONNECTION==='false'){
+        mongoose.connect(MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useCreateIndex: true,
+        })
+        .then(()=>{
+            process.env.CONNECTION=true;
+            db.on('error', console.error.bind('Connection error:'))
+        })
+        .catch(err => 
+            console.log("!!! Error while connecting please check your mongodb service")
+        );
+    }else{
+        clearInterval(this);
+    }
+}
+
+connectToDB();
 
 // function to add the values in the backend
 function addNewShoppingListItem(item){
@@ -25,7 +33,7 @@ function addNewShoppingListItem(item){
             reject(405);
         })
     }
-    if(!CONNECTION){
+    if(process.env.CONNECTION==='false'){
         return new Promise((resolve,reject)=>{
             reject(502);
         })
@@ -38,7 +46,7 @@ function addNewShoppingListItem(item){
 
 // function to get all the shopping list items
 function getAllTheShoppingListItems(){
-    if(!CONNECTION){
+    if(process.env.CONNECTION==='false'){
         return new Promise((resolve,reject)=>{
             reject(502);
         })
@@ -48,7 +56,7 @@ function getAllTheShoppingListItems(){
 
 // clear all the items
 function deleteAllItems(){
-    if(!CONNECTION){
+    if(process.env.CONNECTION==='false'){
         return new Promise((resolve,reject)=>{
             reject(502);
         })
@@ -58,7 +66,7 @@ function deleteAllItems(){
 
 // delete the selected items
 function deleteSelectedItem(name){
-    if(!CONNECTION){
+    if(process.env.CONNECTION==='false'){
         return new Promise((resolve,reject)=>{
             reject(502);
         })
@@ -70,5 +78,6 @@ module.exports = {
     addNewShoppingListItem,
     getAllTheShoppingListItems,
     deleteAllItems,
-    deleteSelectedItem
+    deleteSelectedItem,
+    connectToDB
 }

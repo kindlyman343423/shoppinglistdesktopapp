@@ -13,10 +13,10 @@ const tryConnection = () => client.connect({port: port}, () => {
             const spawn = require('child_process').spawn;
             const out = spawn('yarn run electron',{shell: true})
             out.stdout.on('data', (data)=>{
-                console.log(data.toString());
+                process.stdout.write(data.toString());
             })
             out.stderr.on('data', (data)=>{
-                console.log(data.toString());
+                process.stdout.write(data.toString());
             })
         }
     }

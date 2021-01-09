@@ -12,7 +12,7 @@ const Home = () => {
                 const arr = item.map(val => {
                     return val._doc.name;
                 })
-                setList(() =>([...list,...arr]));
+                setList(() =>([...arr]));
             }else{
                 setList(() =>([...list,item]));
             }
@@ -20,7 +20,6 @@ const Home = () => {
         window.api.receive('item:clear',()=>{
             setList([]);
         })
-
     }, [list])
 
     // function to delete the selected item

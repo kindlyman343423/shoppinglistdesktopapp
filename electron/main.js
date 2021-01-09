@@ -174,6 +174,26 @@ const mainMenuTemplate = [
     },
 ];
 
+// connection to be checked after 2 mins
+setInterval(()=>{
+    console.log("Connected: ", process.env.CONNECTION==='true');
+    db.connectToDB();
+    db.getAllTheShoppingListItems()
+        .then(res => {
+            if(Array.isArray(res) && res.length>0){
+                mainWindow.webContents.send('item:add', res);
+            }
+        })
+        .catch(err => {
+            mainWindow.webContents.send(
+                'item:error', 
+                err===502 
+                ? 'We are unable to get the shopping list Items. Please check your mongodb connection'
+                : 'Unable to get shopping list Items'
+            );
+        });
+},120000)
+
 // if mac add empty object to menu
 if (process.platform === 'darwin') {
     mainMenuTemplate.unshift({});
