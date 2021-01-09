@@ -1,5 +1,11 @@
 {
-  "name": "electronreactboilerplate",
+  "name": "shoppinglistdesktopapp",
+  "description": "Shopping List Desktop App",
+  "author": {
+    "name":"Gaurav Walia",
+    "email": "gauravwalia019@gmail.com"
+  },
+  "license": "MIT",
   "version": "1.0.0",
   "private": true,
   "main": "electron/main.js",
@@ -19,9 +25,7 @@
     "electron": "electron .",
     "dev": "export NODE_ENV=development && concurrently -n 'client,electron' -c 'blue,yellow' \"yarn run client\" \"node .erboilerplate/wait.js\"",
     "prod": "export NODE_ENV=production && yarn run build && yarn run electron",
-    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
-    "package-win": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Shopping List\"",
-    "package-linux": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/icon.png --prune=true --out=release-builds"
+    "package-linux": "yarn run build && electron-builder build --config .erboilerplate/electron-builder.yml -c.extraMetadata.main=electron/main.js --publish never"
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +48,10 @@
   "devDependencies": {
     "concurrently": "^5.3.0",
     "electron": "^11.1.1",
-    "electron-packager": "^15.2.0"
+    "electron-builder": "^22.9.1"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/GauravWalia19/ShoppingListDesktopApp.git"
   }
 }

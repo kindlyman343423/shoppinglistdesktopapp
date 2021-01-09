@@ -1,0 +1,36 @@
+productName: ShoppingListApp
+appId: "org.erb.ShoppingListApp"
+
+# Package electron code into a asar archive. Set to false to debug issues.
+asar: true
+
+files:
+  - ".erboilerplate/kill.js"
+  - "build/**/*"
+  - "electron/"
+  - "models/"
+  - "mongoose/"
+  - "node_modules/**/*"
+  - "package.json"
+
+# Linux configuration
+linux:
+  category: Utility
+  target:
+    - "AppImage"
+
+# Windows configuration
+win:
+  target:
+    - "nsis"
+
+# mac configuration
+mac:
+  target:
+    - "default"
+  type: distribution
+
+directories:
+  app: "."
+  buildResources: "assets"
+  output: "release"

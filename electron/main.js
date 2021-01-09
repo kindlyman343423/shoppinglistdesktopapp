@@ -10,6 +10,8 @@ dirname.pop();
 dirname.push('build');
 dirname.push('index.html');
 
+// for using package-linux script please uncomment below line
+// process.env.NODE_ENV="production"
 console.log('\x1b[34m',`Application Running in ${process.env.NODE_ENV}`,'\x1b[0m');
 
 // Keep a global reference of the window object, if you don't, the window will
