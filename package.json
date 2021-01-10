@@ -25,7 +25,9 @@
     "electron": "electron .",
     "dev": "export NODE_ENV=development && concurrently -n 'client,electron' -c 'blue,yellow' \"yarn run client\" \"node .erboilerplate/wait.js\"",
     "prod": "export NODE_ENV=production && yarn run build && yarn run electron",
-    "package-linux": "yarn run build && electron-builder build --config .erboilerplate/electron-builder.yml -c.extraMetadata.main=electron/main.js --publish never"
+    "package-linux": "yarn run build && electron-builder build --config .erboilerplate/electron-builder.yml -c.extraMetadata.main=electron/main.js --publish never",
+    "package-win": "yarn run build && electron-builder build --config .erboilerplate/electron-builder.yml -c.extraMetadata.main=electron/main.js --publish never",
+    "package-mac": "yarn run build && electron-builder build --config .erboilerplate/electron-builder.yml -c.extraMetadata.main=electron/main.js --publish never"
   },
   "eslintConfig": {
     "extends": [

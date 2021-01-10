@@ -1,6 +1,6 @@
-![shopping list app](./public/hello.gif)
-
 # Shopping List Desktop App
+
+![shopping list app](./public/hello.gif)
 
 Shopping List Desktop Application for different types of machines i.e Windows, MAC and linux.
 
