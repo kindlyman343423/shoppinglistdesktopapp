@@ -3,6 +3,7 @@ const path = require('path');
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 const db = require('../mongoose/db');
 const killport = require('../.erboilerplate/kill').killProcessAtPort;
+const os = require('os');
 
 const DEV_SERVER_URL = 'http://localhost:3000';
 const dirname = __dirname.split('/');
@@ -31,6 +32,7 @@ app.on('ready', () => {
             enableRemoteModule: false,                  // turn off remote
             preload: path.join(__dirname, "preload.js") // use a preload script
         },
+        icon: path.join('..',os.platform() === 'win32' ? 'icons/win/icon.ico' : 'icons/linux/256x256.png')
     });
 
     // load the app mainWindow

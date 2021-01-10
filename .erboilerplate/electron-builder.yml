@@ -22,13 +22,18 @@ linux:
 # Windows configuration
 win:
   target:
-    - "nsis"
+    - "portable"
+  
+portable:
+  artifactName: "shoppinglistapp.exe"
 
 # mac configuration
 mac:
   target:
     - "default"
   type: distribution
+  category: public.app-category.utilities
+  icon: "../icons/mac/icon.icns"
 
 directories:
   app: "."
