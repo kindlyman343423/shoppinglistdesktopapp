@@ -16,6 +16,10 @@ Shopping List Desktop Application for different types of machines i.e Windows, M
 * Windows
 * MAC
 
+## Contribution
+
+For contributing to this desktop application project make sure you check our [Contributing Guidelines](.github/CONTRIBUTING.md)
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -47,6 +51,14 @@ Script to run the application in the `production` environment
 
 Script to be used only on linux platform to generate **.AppImage** file that can be used to directly from command line easily without installation
 
+### `yarn run package-win`
+
+Script to be used only on windows platform to generate portable format **.exe** file that can be used directly in windows
+
+### `yarn run package-mac`
+
+Script to be used only on mac platform to generate default file that can be used to directly from command line easily without installation
+
 ## LICENSE
 
-MIT LICENSE
+[MIT LICENSE](LICENSE)
