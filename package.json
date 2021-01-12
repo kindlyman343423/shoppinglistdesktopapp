@@ -20,10 +20,11 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
+    "init": "yarn install --production && yarn add -D concurrently electron electron-builder",
     "client": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "electron": "electron .",
-    "dev": "export NODE_ENV=development && concurrently -n 'client,electron' -c 'blue,yellow' \"yarn run client\" \"node .erboilerplate/wait.js\"",
+    "dev": "export NODE_ENV=development && concurrently -n 'client,electron' -c 'blue,yellow' \"yarn run client\" \"node scripts/wait.js\"",
     "prod": "export NODE_ENV=production && yarn run build && yarn run electron",
     "package-linux": "yarn run build && electron-builder build --config .erboilerplate/electron-builder.yml -c.extraMetadata.main=electron/main.js --publish never",
     "package-win": "yarn run build && electron-builder build --config .erboilerplate/electron-builder.yml -c.extraMetadata.main=electron/main.js --publish never",

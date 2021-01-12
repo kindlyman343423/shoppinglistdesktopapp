@@ -1,4 +1,3 @@
-const { shell } = require('electron');
 const net = require('net');
 const port = process.env.PORT || 3000;
 
