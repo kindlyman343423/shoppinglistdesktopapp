@@ -63,7 +63,7 @@ Script to run the application in the `production` environment
 
 ### Releasing this project
 
-For releasing this project we have provided three scripts for all the 3 types of OS. But before releasing remember to uncomment the line `process.env.NODE_ENV="production"`
+For releasing this project we have provided three scripts for all the 3 types of OS. But before releasing remember to uncomment the line `config.setNodeEnv('production')` in **electron/main.js**
 
 #### `yarn run package-linux`
 
