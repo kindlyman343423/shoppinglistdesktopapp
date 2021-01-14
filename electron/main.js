@@ -4,6 +4,7 @@ const { app, BrowserWindow, Menu, ipcMain } = electron;
 const db = require('../controller/db');
 const killport = require('./util/kill').killProcessAtPort;
 const config = require('../.erboilerplate/config');
+const wcHandler = require('./winCreationHandler');
 
 // for using package-linux,package-win and package-mac scripts please uncomment below line
 // config.setNodeEnv('production');
@@ -63,34 +64,6 @@ app.on('ready', () => {
     Menu.setApplicationMenu(mainMenu);
 });
 
-/**
- * ADD WINDOW
- **/
-function createAddWindow() {
-    // create new window
-    addWindow = new BrowserWindow({
-        width: 500,
-        height: 500,
-        title: 'Add Shopping List Item',
-        webPreferences: {
-            nodeIntegration: false,     // is default value after Electron v5
-            contextIsolation: true,     // protect against prototype pollution
-            enableRemoteModule: false,  // turn off remote
-            preload: path.join(__dirname, "preload.js") // use a preload script
-        },
-    });
-    // load the add the component file
-    addWindow.loadURL(
-        process.env.NODE_ENV !== 'production'
-            ? path.join(config.DEV_SERVER_URL,'add')
-            : config.getProdServerURL('#/add')
-    );
-
-    addWindow.on('close', () => {
-        addWindow = null;
-    });
-}
-
 /*
  * catching calls from the react UI
  */
@@ -114,7 +87,7 @@ ipcMain.handle('item:add', async (e, item)=>{
     });
 })
 ipcMain.handle('item:openAddWindow', async()=>{
-    createAddWindow();
+    addWindow = wcHandler.createAddWindow(addWindow);
 })
 ipcMain.handle('item:clearSelected', async (e,name)=>{
     db.deleteSelectedItem(name)
@@ -138,7 +111,7 @@ const mainMenuTemplate = [
                 accelerator:
                     process.platform === 'darwin' ? 'Command+L' : 'Ctrl+L',
                 click() {
-                    createAddWindow();
+                    addWindow = wcHandler.createAddWindow(addWindow);
                 },
             },
             {
@@ -172,7 +145,7 @@ const mainMenuTemplate = [
     },
 ];
 
-// connection to be checked after 2 mins
+// database connection to be checked after 2 mins
 setInterval(()=>{
     console.log("Connected: ", process.env.CONNECTION==='true');
     db.connectToDB();
