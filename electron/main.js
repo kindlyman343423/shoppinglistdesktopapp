@@ -26,7 +26,7 @@ app.on('ready', () => {
             enableRemoteModule: false,                  // turn off remote
             preload: path.join(__dirname, "preload.js") // use a preload script
         },
-        icon: path.join('..',process.platform === 'win32' ? 'icons/win/icon.ico' : 'icons/linux/256x256.png')
+        icon: config.getIconsPath()
     });
 
     // load the app mainWindow

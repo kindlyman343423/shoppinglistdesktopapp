@@ -21,5 +21,11 @@ module.exports = {
     },
     init: ()=>{
         console.log('\x1b[1;30;43m',`Application Running in ${process.env.NODE_ENV}`,'\x1b[0m');
+    },
+    getIconsPath: ()=>{
+        const dirname = __dirname.split("/");
+        dirname.pop();
+        dirname.push(process.platform === 'win32' ? 'icons/win/icon.ico' : 'icons/linux/256x256.png');
+        return dirname.join("/");
     }
 };

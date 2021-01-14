@@ -8,6 +8,7 @@ files:
   - ".erboilerplate/config.js"
   - "build/**/*"
   - "controller/"
+  - "icons/**/*"
   - "electron/**/*"
   - "models/"
   - "node_modules/**/*"
