@@ -5,11 +5,11 @@ appId: "org.erb.ShoppingListApp"
 asar: true
 
 files:
-  - ".erboilerplate/kill.js"
+  - ".erboilerplate/config.js"
   - "build/**/*"
-  - "electron/"
+  - "controller/"
+  - "electron/**/*"
   - "models/"
-  - "mongoose/"
   - "node_modules/**/*"
   - "package.json"
 

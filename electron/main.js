@@ -3,16 +3,11 @@ const path = require('path');
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 const db = require('../controller/db');
 const killport = require('./util/kill').killProcessAtPort;
+const config = require('../.erboilerplate/config');
 
-const DEV_SERVER_URL = 'http://localhost:3000';
-const dirname = __dirname.split('/');
-dirname.pop();
-dirname.push('build');
-dirname.push('index.html');
-
-// for using package-linux script please uncomment below line
-// process.env.NODE_ENV="production"
-console.log('\x1b[34m',`Application Running in ${process.env.NODE_ENV}`,'\x1b[0m');
+// for using package-linux,package-win and package-mac scripts please uncomment below line
+// config.setNodeEnv('production');
+config.init();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -37,8 +32,8 @@ app.on('ready', () => {
     // load the app mainWindow
     mainWindow.loadURL(
         process.env.NODE_ENV !== 'production'
-            ? DEV_SERVER_URL
-            : 'file://'+dirname.join('/')+'#/'
+            ? config.DEV_SERVER_URL
+            : config.getProdServerURL('#/')
     ).then(() => {
         db.getAllTheShoppingListItems()
         .then(res => {
@@ -87,8 +82,8 @@ function createAddWindow() {
     // load the add the component file
     addWindow.loadURL(
         process.env.NODE_ENV !== 'production'
-            ? path.join(DEV_SERVER_URL,'add')
-            : 'file://'+dirname.join('/')+'#/add'
+            ? path.join(config.DEV_SERVER_URL,'add')
+            : config.getProdServerURL('#/add')
     );
 
     addWindow.on('close', () => {
