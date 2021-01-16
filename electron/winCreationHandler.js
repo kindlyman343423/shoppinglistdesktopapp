@@ -2,12 +2,20 @@ const path = require('path');
 const { BrowserWindow } = require('electron');
 const config = require('../.erboilerplate/config');
 
-const createAddWindow = (addWindow)=> {
-    // create new window
-    addWindow = new BrowserWindow({
-        width: 500,
-        height: 500,
-        title: 'Add Shopping List Item',
+/**
+ * function to create the additional window
+ * 
+ * @param windowName window variable to send
+ * @param height height of the window
+ * @param width width of the window
+ * @param title title of the window
+ * @param componentPath path of the react component file mentioned in App.js
+ **/
+const createWindow = (windowName,height,width,title,componentPath) => {
+    windowName = new BrowserWindow({
+        width,
+        height,
+        title,
         webPreferences: {
             nodeIntegration: false,     // is default value after Electron v5
             contextIsolation: true,     // protect against prototype pollution
@@ -15,19 +23,20 @@ const createAddWindow = (addWindow)=> {
             preload: path.join(__dirname, "preload.js") // use a preload script
         },
     });
-    // load the add the component file
-    addWindow.loadURL(
+
+    // load the component file
+    windowName.loadURL(
         process.env.NODE_ENV !== 'production'
-            ? path.join(config.DEV_SERVER_URL,'add')
-            : config.getProdServerURL('#/add')
+            ? path.join(config.DEV_SERVER_URL,componentPath)
+            : config.getProdServerURL('#/' + componentPath)
     );
 
-    addWindow.on('close', () => {
-        addWindow = null;
+    windowName.on('close', () => {
+        windowName = null;
     });
-    return addWindow;
+    return windowName;
 }
 
 module.exports = {
-    createAddWindow
+    createWindow
 }

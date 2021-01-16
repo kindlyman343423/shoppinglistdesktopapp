@@ -27,7 +27,8 @@ app.on('ready', () => {
             enableRemoteModule: false,                  // turn off remote
             preload: path.join(__dirname, "preload.js") // use a preload script
         },
-        icon: config.getIconsPath()
+        icon: config.getIconsPath(),
+        title: 'Shopping List App'
     });
 
     // load the app mainWindow
@@ -87,7 +88,7 @@ ipcMain.handle('item:add', async (e, item)=>{
     });
 })
 ipcMain.handle('item:openAddWindow', async()=>{
-    addWindow = wcHandler.createAddWindow(addWindow);
+    addWindow = wcHandler.createWindow(addWindow,500,500,'Add Shopping List Item', 'add');
 })
 ipcMain.handle('item:clearSelected', async (e,name)=>{
     db.deleteSelectedItem(name)
@@ -111,7 +112,7 @@ const mainMenuTemplate = [
                 accelerator:
                     process.platform === 'darwin' ? 'Command+L' : 'Ctrl+L',
                 click() {
-                    addWindow = wcHandler.createAddWindow(addWindow);
+                    addWindow = wcHandler.createWindow(addWindow,500,500,'Add Shopping List Item', 'add');
                 },
             },
             {
