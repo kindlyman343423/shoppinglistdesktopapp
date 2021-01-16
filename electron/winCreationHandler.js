@@ -1,6 +1,7 @@
 const path = require('path');
-const { BrowserWindow } = require('electron');
+const { BrowserWindow, Menu } = require('electron');
 const config = require('../.erboilerplate/config');
+const {fixMenus} = require('./Templates');
 
 /**
  * function to create the additional window
@@ -10,8 +11,9 @@ const config = require('../.erboilerplate/config');
  * @param width width of the window
  * @param title title of the window
  * @param componentPath path of the react component file mentioned in App.js
+ * @param menuTemplate menu template in array format
  **/
-const createWindow = (windowName,height,width,title,componentPath) => {
+const createWindow = (windowName, height, width, title, componentPath, menuTemplate) => {
     windowName = new BrowserWindow({
         width,
         height,
@@ -23,7 +25,12 @@ const createWindow = (windowName,height,width,title,componentPath) => {
             preload: path.join(__dirname, "preload.js") // use a preload script
         },
     });
-
+    if(menuTemplate){
+        menuTemplate = fixMenus(menuTemplate);
+        windowName.setMenu(Menu.buildFromTemplate(menuTemplate))
+    }else{
+        windowName.setMenu(null)
+    }
     // load the component file
     windowName.loadURL(
         process.env.NODE_ENV !== 'production'
