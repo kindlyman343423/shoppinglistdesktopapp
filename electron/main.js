@@ -11,17 +11,12 @@ const { getMainMenuTemplate } = require('./Templates');
 // config.setNodeEnv('production');
 config.init();
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
-let addWindow;
-
 /**
  * MAIN WINDOW
  **/
 app.on('ready', () => {
     // create new window
-    mainWindow = new BrowserWindow({
+    global.mainWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: false, // is default value after Electron v5
             contextIsolation: true, // protect against prototype pollution
@@ -33,7 +28,7 @@ app.on('ready', () => {
     });
 
     // load the app mainWindow
-    mainWindow
+    global.mainWindow
         .loadURL(
             process.env.NODE_ENV !== 'production'
                 ? config.DEV_SERVER_URL
@@ -43,11 +38,11 @@ app.on('ready', () => {
             db.getAllTheShoppingListItems()
                 .then((res) => {
                     if (Array.isArray(res) && res.length > 0) {
-                        mainWindow.webContents.send('item:add', res);
+                        global.mainWindow.webContents.send('item:add', res);
                     }
                 })
                 .catch((err) => {
-                    mainWindow.webContents.send(
+                    global.mainWindow.webContents.send(
                         'item:error',
                         err === 502
                             ? 'We are unable to get the shopping list Items. Please check your mongodb connection'
@@ -57,13 +52,13 @@ app.on('ready', () => {
         });
 
     // quit app when closed
-    mainWindow.on('close', () => {
+    global.mainWindow.on('close', () => {
         app.quit();
         killport(3000);
     });
 
     // build menu from template
-    const mainMenuTemplate = getMainMenuTemplate(app, mainWindow, addWindow);
+    const mainMenuTemplate = getMainMenuTemplate(app);
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     // insert the menu
     Menu.setApplicationMenu(mainMenu);
@@ -77,11 +72,11 @@ ipcMain.handle('item:add', async (e, item) => {
     db.addNewShoppingListItem(item)
         .then((res) => {
             // sending values to Home
-            mainWindow.webContents.send('item:add', item);
-            addWindow.close();
+            global.mainWindow.webContents.send('item:add', item);
+            global.addWindow.close();
         })
         .catch((err) => {
-            addWindow.webContents.send(
+            global.addWindow.webContents.send(
                 'item:error',
                 err === 502
                     ? 'Unable to add the Item. Please check your mongo connection'
@@ -92,7 +87,7 @@ ipcMain.handle('item:add', async (e, item) => {
         });
 });
 ipcMain.handle('item:openAddWindow', async () => {
-    addWindow = wcHandler.createWindow(addWindow, 500, 500, 'Add Shopping List Item', 'add', [
+    global.addWindow = wcHandler.createWindow(global.addWindow, 500, 500, 'Add Shopping List Item', 'add', [
         {
             label: 'File',
             submenu: [
@@ -101,7 +96,7 @@ ipcMain.handle('item:openAddWindow', async () => {
                     accelerator:
                         process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
                     click() {
-                        addWindow.close();
+                        global.addWindow.close();
                     },
                 },
             ],
@@ -110,7 +105,7 @@ ipcMain.handle('item:openAddWindow', async () => {
 });
 ipcMain.handle('item:clearSelected', async (e, name) => {
     db.deleteSelectedItem(name).catch((err) => {
-        mainWindow.webContents.send(
+        global.mainWindow.webContents.send(
             'item:error',
             err === 502
                 ? 'Unable to delete the Selected Item. Please check your mongodb connection.'
@@ -126,11 +121,11 @@ setInterval(() => {
     db.getAllTheShoppingListItems()
         .then((res) => {
             if (Array.isArray(res) && res.length > 0) {
-                mainWindow.webContents.send('item:add', res);
+                global.mainWindow.webContents.send('item:add', res);
             }
         })
         .catch((err) => {
-            mainWindow.webContents.send(
+            global.mainWindow.webContents.send(
                 'item:error',
                 err === 502
                     ? 'We are unable to get the shopping list Items. Please check your mongodb connection'

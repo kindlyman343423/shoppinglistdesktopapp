@@ -1,4 +1,3 @@
-const wcHandler = require('./winCreationHandler');
 const db = require('../controller/db');
 
 const developerToolsMenu = {
@@ -37,10 +36,8 @@ const fixMenus = (template) => {
 /**
  * return the main template for the app
  * @param app
- * @param mainWindow
- * @param addWindow
  **/
-const getMainMenuTemplate = (app, mainWindow, addWindow) => {
+const getMainMenuTemplate = (app) => {
     // create a menu template
     let mainMenuTemplate = [
         {
@@ -51,7 +48,7 @@ const getMainMenuTemplate = (app, mainWindow, addWindow) => {
                     accelerator:
                         process.platform === 'darwin' ? 'Command+L' : 'Ctrl+L',
                     click() {
-                        addWindow = wcHandler.createWindow(addWindow, 500, 500, 'Add Shopping List Item', 'add',[
+                        global.addWindow = require('./winCreationHandler').createWindow(global.addWindow, 500, 500, 'Add Shopping List Item', 'add',[
                             {
                                 label: 'File',
                                 submenu: [
@@ -60,7 +57,7 @@ const getMainMenuTemplate = (app, mainWindow, addWindow) => {
                                         accelerator:
                                             process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
                                         click() {
-                                            addWindow.close();
+                                            global.addWindow.close();
                                         },
                                     },
                                 ],
@@ -75,10 +72,10 @@ const getMainMenuTemplate = (app, mainWindow, addWindow) => {
                     click() {
                         db.deleteAllItems()
                             .then(() => {
-                                mainWindow.webContents.send('item:clear');
+                                global.mainWindow.webContents.send('item:clear');
                             })
                             .catch((err) => {
-                                mainWindow.webContents.send(
+                                global.mainWindow.webContents.send(
                                     'item:error',
                                     err === 502
                                         ? 'Unable to clear the Items. Please check your mongodb connection.'
